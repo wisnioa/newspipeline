@@ -1,18 +1,33 @@
 from dotenv import load_dotenv
 import os
 import requests
+import sys
 
-load_dotenv()  # will read .env if it exists
+load_dotenv()
 
 api_key = os.getenv("NEWS_API_KEY")
 if not api_key:
-    raise ValueError("No NEWS_API_KEY found in environment variables")
+    print("ERROR: No NEWS_API_KEY found in environment variables")
+    sys.exit(1)  
 
 
 url = f"https://newsapi.org/v2/top-headlines?country=us&pageSize=5&apiKey={api_key}"
 
-response = requests.get(url)
-data = response.json()
+
+try:
+    response = requests.get(url)
+    response.raise_for_status()  
+except requests.exceptions.RequestException as e:
+    print(f"ERROR: Failed to fetch news: {e}")
+    sys.exit(1)
+
+try:
+    data = response.json()
+    articles = data.get("articles", [])
+except ValueError as e:
+    print(f"ERROR: Failed to parse JSON: {e}")
+    sys.exit(1)
+
 
 html_content = """
 <!DOCTYPE html>
@@ -26,12 +41,10 @@ html_content = """
 <ul>
 """
 
-for article in data['articles']:
-    html_content += f'<li><a href="{article["url"]}" target="_blank">{article["title"]}</a></li>'
-
-html_content += "</ul></body></html>"
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(html_content)
-
-print("index.html generated successfully!")
+if not articles:
+    html_content += "<li>No articles found.</li>"
+else:
+    for article in articles:
+        title = article.get("title", "No title")
+        url_link = article.get("url", "#")
+        html_content += f'<li><a href="{url_link}" target="_blan_
