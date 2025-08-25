@@ -47,4 +47,4 @@ else:
     for article in articles:
         title = article.get("title", "No title")
         url_link = article.get("url", "#")
-        html_content += f'<li><a href="{url_link}" target="_blan_
+        html_content += f'<li><a href="{url_link}" target="_blank">{title}</a></li>'
