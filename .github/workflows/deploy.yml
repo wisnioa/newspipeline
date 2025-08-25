@@ -31,7 +31,7 @@ jobs:
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
         run: |
-          python news_script.py
+          python fetch.py
 
       # 5. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
