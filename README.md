@@ -17,7 +17,9 @@ NewsPipeline is a lightweight static website that aggregates news links from spe
    ```bash
    git clone https://github.com/wisnioa/newspipeline.git
    cd newspipeline
-2. To run locally: python fetch.py
+2. To run locally: 
+   ```bash
+   python fetch.py
 
 ---
 
